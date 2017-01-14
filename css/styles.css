@@ -1,0 +1,85 @@
+html, body {
+	font-size: 16pt;
+	margin:0;
+	padding: 0;
+
+	height:100%;
+
+	overflow:hidden;
+
+}
+
+body {
+	background: url(../img/background.png) repeat scroll left top;
+}
+
+#top {
+	background-color: lightgrey;
+	margin:0;
+	overflow: hidden;
+	min-height: 127px;
+}
+
+#targetnumber {
+	border-width: 4px;
+	border-style: solid;
+	border-color: cyan;
+
+	width: 3em;
+	//min-height: 1em;
+	text-align: center;
+	margin:8px auto;
+
+	margin-top:20px;
+
+	background-color: blue;
+	color: white;
+}
+
+#numberscontainer {
+	text-align: center;
+	margin:20px auto;
+	background-color: cyan;
+	padding: 4px;
+	margin-left: 0px;
+	margin-right: 0px;
+	display: inline-block;
+}
+
+.numbercontainer {
+	//border-width: 4px;
+	//border-style: solid;
+	border-color: cyan;
+
+	width: 3ch;
+	text-align: center;
+	//margin-right: -4px;
+	//margin-left: -4px;
+	display: inline-block; /* or maybe inline-table */
+
+	background-color: blue;
+	color: white;
+}
+
+#numbers-table {
+	text-align: center;
+	margin: auto;
+}
+
+.number-col {
+	width: 3ch;
+	height: 3ch;
+	border-color: cyan;
+	border-style: ridge;
+	color: white;
+	background: blue;
+}
+
+.number-col:empty {
+    background-color: cyan;
+}
+
+#solvingarea {
+	//height: 100%;
+	//width: 100%;
+}

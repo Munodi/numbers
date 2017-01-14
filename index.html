@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="shortcut icon" href="/favicon.ico">
+
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+		<link rel="stylesheet" type="text/css" href="css/styles.css">
+
+		<script type="text/javascript" src="js/numbers.js"></script>
+		<title>Numbers</title>
+
+
+
+	</head>
+	<body>
+		<div id="top">
+			<div id="control-button-holder">
+				<button id="large0" class="btn btn-primary">6s</button>
+				<button id="large1" class="btn btn-primary">1 l &amp; 5 s</button>
+				<button id="large2" class="btn btn-primary">2 l &amp; 4 s</button>
+				<button id="large3" class="btn btn-primary">3 l &amp; 3 s</button>
+				<button id="large4" class="btn btn-primary">4 l &amp; 2 s</button>
+				<button id="generate-number" class="btn btn-primary">Generate number</button>
+				<button id="start-clock" class="btn" autocomplete="off">Start clock</button>
+				<span id="countdown-display"></span>
+			</div>
+			<div id="targetnumber">&#8203;</div>
+			<!--<div id="numberscontainer">
+				<span class="numbercontainer">25</span>
+				<span class="numbercontainer">50</span>
+				<span class="numbercontainer">75</span>
+				<span class="numbercontainer">100</span>
+				<span class="numbercontainer">&#8203;</span>
+				<span class="numbercontainer">&#8203;</span>
+			</div>-->
+			<table id="numbers-table">
+				<tr>
+					<td class="number-col"></td>
+					<td class="number-col"></td>
+					<td class="number-col"></td>
+					<td class="number-col"></td>
+					<td class="number-col"></td>
+					<td class="number-col"></td>
+				</tr>
+			</table>
+		</div>
+		<canvas id="solvingarea">
+		</canvas>
+	</body>
+</html>
