@@ -1,3 +1,4 @@
+"use strict";
 $(function() {
 
 	// control select numbers buttons
@@ -36,7 +37,14 @@ $(function() {
 
 	// control generate number button
 	$("#generate-number").click(function() {
-		$("#targetnumber").text(Math.floor(Math.random() * 999) + 1);
+		var randomChangesLeft = 12;
+		var randomlyChangeTarget = function() {
+			$("#targetnumber").text(Math.floor(Math.random() * 999) + 1);
+			--randomChangesLeft;
+			if(randomChangesLeft)
+				setTimeout(randomlyChangeTarget, 75);
+		};
+		randomlyChangeTarget();
 	});
 
 	// control start clock button
