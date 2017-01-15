@@ -64,6 +64,10 @@ $(function() {
 		$("#countdown-display").text('');
 	})
 
+	$("#clear-drawing-area-button").click(function() {
+		var canvas = document.getElementById("solvingarea").width += 0;
+	});
+
 	var fixCanvasSize = function() {
 		console.log('resized');
 		var canvas = document.getElementById("solvingarea");

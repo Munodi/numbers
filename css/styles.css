@@ -83,3 +83,9 @@ body {
 	//height: 100%;
 	//width: 100%;
 }
+
+#clear-drawing-area-button {
+	position: absolute;
+	bottom: 0.5em;
+	left: 0.5em;
+}
