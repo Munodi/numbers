@@ -16,15 +16,31 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 		<link rel="stylesheet" type="text/css" href="css/styles.css">
 
-		<script type="text/javascript" src="js/numbers.js"></script>
+		<script src="js/numbers.js"></script>
 		<title>Numbers</title>
 
 
 
 	</head>
 	<body>
+	<!-- Modal -->
+	<div class="modal " id="solution-modal" tabindex="-1" role="dialog" aria-labelledby="solutionModalLabel" data-backdrop="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="solutionModalLabel">Solution</h4>
+		</div>
+		<div class="modal-body" id="solution-modal-text">
+			calculating <i class="fa fa-spinner fa-spin"></i>
+		</div>
+		</div>
+	</div>
+	</div>
 		<div id="top">
 			<div id="control-button-holder">
 				<button id="large0" class="btn btn-primary">6s</button>
@@ -35,6 +51,7 @@
 				<button id="generate-number" class="btn btn-primary">Generate number</button>
 				<button id="start-clock" class="btn" autocomplete="off">Start clock</button>
 				<span id="countdown-display"></span>
+				<button id="display-solution" class="btn btn-default"><i class="fa fa-calculator"></i></button>
 			</div>
 			<div id="targetnumber">&#8203;</div>
 			<!--<div id="numberscontainer">

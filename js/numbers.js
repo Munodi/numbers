@@ -126,4 +126,149 @@ $(function() {
 	document.getElementById("solvingarea").addEventListener("mousedown", handleMouseDown, false);
 	document.getElementById("solvingarea").addEventListener("mouseup", handleMouseUp, false);
 	document.getElementById('solvingarea').addEventListener("mousemove", handleMouseMove, false);
+
+	var findSolution = function(targetNumber, numbers) {
+
+		/*class PartialExpression {
+			constructor(first, remaining) {
+				this.stack = [first];
+				this.postfixExpr = [first];
+				this.remaining = remaining;
+			}
+
+			addNumber(number) {
+				const newExpr = new PartialExpression
+			}
+		}*/
+
+		const createPartialExpression = function(first, remaining) {
+			return {
+				stack: [first],
+				postfixExpr: [first],
+				remaining: remaining
+			};
+		};
+
+		// create queue of partial expression
+		const dfsStack = [];
+
+		// add to first six nodes, that is one partial expression for each number
+		for(let i = 0; i < numbers.length; ++i) {
+			const remaining = numbers.slice(0);
+			remaining.splice(i, 1);
+			dfsStack.push(new createPartialExpression(numbers[i], remaining));
+		}
+
+		let solution = null;
+		while(dfsStack.length) {
+			const top = dfsStack.pop();
+			if(top.stack.length === 1 && top.stack[0] === targetNumber) {	// if top expression is a solution
+				solution = top.postfixExpr;
+				break;
+			}
+			if(top.remaining.length >= 1) {		// for each element of remaining, push onto queue new expression with that element
+				for(let i = 0; i < top.remaining.length; ++i) {
+					const remaining = top.remaining.slice(0);
+					remaining.splice(i, 1);
+					dfsStack.push({
+						"stack": top.stack.concat([top.remaining[i]]),
+						"postfixExpr": top.postfixExpr.concat([top.remaining[i]]),
+						"remaining": remaining
+					});
+				}
+			}
+			// for each operator (+-*/) if applying it makes an expression push onto queue new expression with the operation
+			if(top.stack.length >= 2) {
+				const n2 = top.stack.pop();
+				const n1 = top.stack.pop();
+
+				// '+'
+				if(n1 >= n2)	// optimisation, taking advantage of the fact addition is commutative
+					dfsStack.push({
+						"stack": top.stack.concat([n1 + n2]),
+						"postfixExpr": top.postfixExpr.concat(['+']),
+						"remaining": top.remaining
+					});
+
+				// '-'
+				if(n1 >= n2 && n1 - n2 !== n2)	// first comparison is needed so intermediate result is not <=0, secondis optimisation that filters out useless calculations eg. 100 - 50 = 50 so might as well just use 50
+					dfsStack.push({
+						"stack": top.stack.concat([n1 - n2]),
+						"postfixExpr": top.postfixExpr.concat(['-']),
+						"remaining": top.remaining
+					});
+
+				// '*'
+				if(n1 != 1 && n2 != 1 && n1 >= n2)	// optimisation, don't bother multiplying by 1 and multiplication is commutative
+					dfsStack.push({
+						"stack": top.stack.concat([n1 * n2]),
+						"postfixExpr": top.postfixExpr.concat(['*']),
+						"remaining": top.remaining
+					});
+
+				// '/'
+				if(n2 > 1 && n1 % n2 === 0)
+					dfsStack.push({
+						"stack": top.stack.concat([n1 / n2]),
+						"postfixExpr": top.postfixExpr.concat(['/']),
+						"remaining": top.remaining
+					});
+			}
+		}
+
+		return solution;
+	};
+
+	$("#display-solution").click(function() {
+		// get target
+		const targetNumber = ~~($("#targetnumber").text());
+
+		const numbers = [];
+		$(".number-col").each(function(index) {
+			numbers.push(~~($(this).text()));
+		});
+
+		if(targetNumber === 0 || numbers.indexOf(0) >= 0)		// if either is invalid, note ~~ returns 0 for non-integer string
+			return;
+
+		$("#solution-modal-text").html('calculating <i class="fa fa-spinner fa-spin"></i>');
+		$("#solution-modal").modal();
+
+		setTimeout(function() {
+			const solution = findSolution(targetNumber, numbers);
+			if(solution)
+				console.log(solution.join(" "));
+
+			$("#solution-modal-text").html(solution ? function() {
+				const stack = [];
+				const answerList = [];
+				while(solution.length) {
+					const first = solution.shift();
+					if(typeof(first) === "number") {
+						stack.push(first);
+					} else {
+						const n2 = stack.pop();
+						const n1 = stack.pop();
+						let newStackTop;
+						if (first === "+") {
+							newStackTop = n1 + n2;
+						} else if (first === "-") {
+							newStackTop = n1 - n2;
+						} else if (first === "*") {
+							newStackTop = n1 * n2;
+						} else if (first === "/") {
+							newStackTop = n1 / n2;
+						}
+						if (solution.length) {
+							answerList.push(n1 + " " + first + " " + n2 + " = " + newStackTop);
+						} else {
+							answerList.push(n1 + " " + first + " " + n2 + " = <u>" + newStackTop + "</u>");
+						}
+						stack.push(newStackTop);
+					}
+				}
+				return answerList.join("<br>");
+			}() : "Could not find a solution");
+		}, 0);
+	});
 });
