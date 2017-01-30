@@ -41,27 +41,30 @@
 		</div>
 	</div>
 	</div>
-		<div id="top">
-			<div id="control-button-holder">
-				<button id="large0" class="btn btn-primary">6s</button>
-				<button id="large1" class="btn btn-primary">1 l &amp; 5 s</button>
-				<button id="large2" class="btn btn-primary">2 l &amp; 4 s</button>
-				<button id="large3" class="btn btn-primary">3 l &amp; 3 s</button>
-				<button id="large4" class="btn btn-primary">4 l &amp; 2 s</button>
-				<button id="generate-number" class="btn btn-primary">Generate number</button>
-				<button id="start-clock" class="btn" autocomplete="off">Start clock</button>
-				<span id="countdown-display"></span>
-				<button id="display-solution" class="btn btn-default"><i class="fa fa-calculator"></i></button>
+		<div id="top" >
+			<div class="container-fluid">
+				<div id="number-selection-button-holder" class="row">
+					<button id="large0" class="btn btn-default col-xs-4 col-sm-offset-1 col-sm-2" title="Six small">6s</button>
+					<button id="large1" class="btn btn-default col-xs-4 col-sm-2" title="One large and five small">1 l &amp; 5 s</button>
+					<button id="large2" class="btn btn-default col-xs-4 col-sm-2" title="Two large and four small">2 l &amp; 4 s</button>
+					<button id="large3" class="btn btn-default col-xs-4 col-xs-offset-2 col-sm-2 col-sm-offset-0" title="Three large and three small">3 l &amp; 3 s</button>
+					<button id="large4" class="btn btn-default col-xs-4 col-xs-offset-0 col-sm-2 col-sm-offset-0" title="Four large and two small">4 l &amp; 2 s</button>
+				</div>
+				<div id="generate-number-button-holder" class="row hidden">
+					<button id="generate-number" class="btn btn-default col-xs-10 col-xs-offset-1">Generate number</button>
+				</div>
+				<div id="play-game-control-holder" class="row hidden">
+					<button type="button" class="btn btn-default col-xs-4" id="restart-button">
+						<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> New game
+					</button>
+					<button id="display-solution" class="btn btn-default col-xs-4"><i class="fa fa-calculator"></i> Solution</button>
+					<span id="countdown-display" class="col-xs-4 hidden"></span>
+					<button id="start-clock" class="btn btn-default col-xs-4" autocomplete="off">
+						<span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span> Start clock
+					</button>
+				</div>
 			</div>
 			<div id="targetnumber">&#8203;</div>
-			<!--<div id="numberscontainer">
-				<span class="numbercontainer">25</span>
-				<span class="numbercontainer">50</span>
-				<span class="numbercontainer">75</span>
-				<span class="numbercontainer">100</span>
-				<span class="numbercontainer">&#8203;</span>
-				<span class="numbercontainer">&#8203;</span>
-			</div>-->
 			<table id="numbers-table">
 				<tr>
 					<td class="number-col"></td>

@@ -22,7 +22,7 @@ body {
 
 #targetnumber {
 	border-width: 4px;
-	border-style: solid;
+	border-style: ridge;
 	border-color: cyan;
 
 	width: 3em;
@@ -30,40 +30,15 @@ body {
 	text-align: center;
 	margin:8px auto;
 
-	margin-top:20px;
-
 	background-color: blue;
 	color: white;
-}
 
-#numberscontainer {
-	text-align: center;
-	margin:20px auto;
-	background-color: cyan;
-	padding: 4px;
-	margin-left: 0px;
-	margin-right: 0px;
-	display: inline-block;
-}
-
-.numbercontainer {
-	//border-width: 4px;
-	//border-style: solid;
-	border-color: cyan;
-
-	width: 3ch;
-	text-align: center;
-	//margin-right: -4px;
-	//margin-left: -4px;
-	display: inline-block; /* or maybe inline-table */
-
-	background-color: blue;
-	color: white;
+	display: table;
 }
 
 #numbers-table {
 	text-align: center;
-	margin: auto;
+	margin: 8px auto;
 }
 
 .number-col {
@@ -88,4 +63,9 @@ body {
 	position: absolute;
 	bottom: 0.5em;
 	left: 0.5em;
+}
+
+#countdown-display {
+	text-align: right;
+	cursor: pointer;
 }

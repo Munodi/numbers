@@ -18,21 +18,23 @@ $(function() {
 		$(".number-col").each(function(index) {
 			$(this).text(numbers[index]);
 		});
-	}
+		$("#number-selection-button-holder").addClass("hidden");
+		$("#generate-number-button-holder").removeClass("hidden");
+	};
 	$("#large0").click(function() {
-		fillBoxes(0)
+		fillBoxes(0);
 	});
 	$("#large1").click(function() {
-		fillBoxes(1)
+		fillBoxes(1);
 	});
 	$("#large2").click(function() {
-		fillBoxes(2)
+		fillBoxes(2);
 	});
 	$("#large3").click(function() {
-		fillBoxes(3)
+		fillBoxes(3);
 	});
 	$("#large4").click(function() {
-		fillBoxes(4)
+		fillBoxes(4);
 	});
 
 	// control generate number button
@@ -41,8 +43,12 @@ $(function() {
 		var randomlyChangeTarget = function() {
 			$("#targetnumber").text(Math.floor(Math.random() * 999) + 1);
 			--randomChangesLeft;
-			if(randomChangesLeft)
+			if(randomChangesLeft) {
 				setTimeout(randomlyChangeTarget, 75);
+			} else {
+				$("#generate-number-button-holder").addClass("hidden");
+				$("#play-game-control-holder").removeClass("hidden");
+			}
 		};
 		randomlyChangeTarget();
 	});
@@ -50,27 +56,41 @@ $(function() {
 	// control start clock button
 	var clockTimeout;
 	$("#start-clock").click(function() {
-		$("#start-clock").attr("disabled", true);
+		$("#start-clock").addClass("hidden");
+		$("#countdown-display").removeClass("hidden");
 		var startTime = new Date().getTime();
 		var updateClock = function() {
 			var currentTime = new Date().getTime();
 			var elapsedTime = (currentTime - startTime) / 1000.0;
-			$("#countdown-display").text(elapsedTime < 30 ? elapsedTime : 30);
+			$("#countdown-display").text(elapsedTime < 30 ? elapsedTime.toFixed(3) : 30);
 			if(elapsedTime < 30) {
 				clockTimeout = setTimeout(updateClock, 40);
-			}
-			else {
-				$("#start-clock").attr("disabled", false);
 			}
 		}
 		updateClock();
 	});
 
-	$("#countdown-display").click(function() {
+	var resetClock = function() {
 		clearTimeout(clockTimeout);
-		$("#start-clock").attr("disabled", false);
-		$("#countdown-display").text('');
-	})
+		$("#countdown-display").text("");
+		$("#countdown-display").addClass("hidden");
+		$("#start-clock").removeClass("hidden");
+	};
+	$("#countdown-display").click(resetClock);
+
+	$("#restart-button").click(function() {
+		$(".number-col").each(function(index) {
+			$(this).text("");
+		});
+		$("#targetnumber").html("&#8203;");
+
+		resetClock();
+
+		$("#clear-drawing-area-button").click();
+
+		$("#play-game-control-holder").addClass("hidden");
+		$("#number-selection-button-holder").removeClass("hidden");
+	});
 
 	$("#clear-drawing-area-button").click(function() {
 		var canvas = document.getElementById("solvingarea").width += 0;
@@ -84,7 +104,7 @@ $(function() {
 		canvas.width = Math.floor(window.innerWidth);
 		canvas.height = Math.floor(window.innerHeight - $('#top').outerHeight(true));
 		canvas.getContext("2d").putImageData(imagedata, 0, 0);
-	}
+	};
 
 	$(window).resize(fixCanvasSize);
 	$(window).resize();
@@ -97,11 +117,11 @@ $(function() {
 
 	var handleMouseDown = function(event) {
 		mouseStatus.down = true;
-	}
+	};
 
 	var handleMouseUp = function(event) {
 		mouseStatus.down = false;
-	}
+	};
 
 	var handleMouseMove = function(event) {
 		var rect = document.getElementById('solvingarea').getBoundingClientRect();
@@ -121,11 +141,11 @@ $(function() {
 		mouseStatus.x = newX;
 		mouseStatus.y = newY;
 		console.log(mouseStatus);
-	}
+	};
 
 	document.getElementById("solvingarea").addEventListener("mousedown", handleMouseDown, false);
 	document.getElementById("solvingarea").addEventListener("mouseup", handleMouseUp, false);
-	document.getElementById('solvingarea').addEventListener("mousemove", handleMouseMove, false);
+	document.getElementById("solvingarea").addEventListener("mousemove", handleMouseMove, false);
 
 	var findSolution = function(targetNumber, numbers) {
 
