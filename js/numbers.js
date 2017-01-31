@@ -149,18 +149,6 @@ $(function() {
 
 	var findSolution = function(targetNumber, numbers) {
 
-		/*class PartialExpression {
-			constructor(first, remaining) {
-				this.stack = [first];
-				this.postfixExpr = [first];
-				this.remaining = remaining;
-			}
-
-			addNumber(number) {
-				const newExpr = new PartialExpression
-			}
-		}*/
-
 		const createPartialExpression = function(first, remaining) {
 			return {
 				stack: [first],
@@ -169,70 +157,73 @@ $(function() {
 			};
 		};
 
-		// create queue of partial expression
-		const dfsStack = [];
-
-		// add to first six nodes, that is one partial expression for each number
-		for(let i = 0; i < numbers.length; ++i) {
-			const remaining = numbers.slice(0);
-			remaining.splice(i, 1);
-			dfsStack.push(new createPartialExpression(numbers[i], remaining));
-		}
-
 		let solution = null;
-		while(dfsStack.length) {
-			const top = dfsStack.pop();
-			if(top.stack.length === 1 && top.stack[0] === targetNumber) {	// if top expression is a solution
-				solution = top.postfixExpr;
-				break;
+		iterativeDeepeningLoop:
+		for(let minRemaining = 5; minRemaining >= 0; --minRemaining) {
+			// create queue of partial expression
+			const dfsStack = [];
+
+			// add to first six nodes, that is one partial expression for each number
+			for(let i = 0; i < numbers.length; ++i) {
+				const remaining = numbers.slice(0);
+				remaining.splice(i, 1);
+				dfsStack.push(createPartialExpression(numbers[i], remaining));
 			}
-			if(top.remaining.length >= 1) {		// for each element of remaining, push onto queue new expression with that element
-				for(let i = 0; i < top.remaining.length; ++i) {
-					const remaining = top.remaining.slice(0);
-					remaining.splice(i, 1);
-					dfsStack.push({
-						"stack": top.stack.concat([top.remaining[i]]),
-						"postfixExpr": top.postfixExpr.concat([top.remaining[i]]),
-						"remaining": remaining
-					});
+
+			while(dfsStack.length) {
+				const top = dfsStack.pop();
+				if(top.stack.length === 1 && top.stack[0] === targetNumber) {	// if top expression is a solution
+					solution = top.postfixExpr;
+					break iterativeDeepeningLoop;
 				}
-			}
-			// for each operator (+-*/) if applying it makes an expression push onto queue new expression with the operation
-			if(top.stack.length >= 2) {
-				const n2 = top.stack.pop();
-				const n1 = top.stack.pop();
+				if(top.remaining.length >= 1 && top.remaining.length > minRemaining) {	// if remaining is not empty and length is > minRemaining, then the expansions pushed have a remaining length >= minRemaining
+					for(let i = 0; i < top.remaining.length; ++i) {	// for each number in remaining, push onto queue new expression expanded with that number
+						const remaining = top.remaining.slice(0);
+						remaining.splice(i, 1);
+						dfsStack.push({
+							"stack": top.stack.concat(top.remaining[i]),
+							"postfixExpr": top.postfixExpr.concat(top.remaining[i]),
+							"remaining": remaining
+						});
+					}
+				}
+				// for each operator (+-*/) if applying it makes an expression push onto queue new expression with the operation
+				if(top.stack.length >= 2) {
+					const n2 = top.stack.pop();
+					const n1 = top.stack.pop();
 
-				// '+'
-				if(n1 >= n2)	// optimisation, taking advantage of the fact addition is commutative
-					dfsStack.push({
-						"stack": top.stack.concat([n1 + n2]),
-						"postfixExpr": top.postfixExpr.concat(['+']),
-						"remaining": top.remaining
-					});
+					// '+'
+					if(n1 >= n2)	// optimisation, taking advantage of the fact addition is commutative
+						dfsStack.push({
+							"stack": top.stack.concat(n1 + n2),
+							"postfixExpr": top.postfixExpr.concat("+"),
+							"remaining": top.remaining
+						});
 
-				// '-'
-				if(n1 >= n2 && n1 - n2 !== n2)	// first comparison is needed so intermediate result is not <=0, secondis optimisation that filters out useless calculations eg. 100 - 50 = 50 so might as well just use 50
-					dfsStack.push({
-						"stack": top.stack.concat([n1 - n2]),
-						"postfixExpr": top.postfixExpr.concat(['-']),
-						"remaining": top.remaining
-					});
+					// '-'
+					if(n1 >= n2 && n1 - n2 !== n2)	// first comparison is needed so intermediate result is not <=0, secondis optimisation that filters out useless calculations eg. 100 - 50 = 50 so might as well just use 50
+						dfsStack.push({
+							"stack": top.stack.concat(n1 - n2),
+							"postfixExpr": top.postfixExpr.concat("-"),
+							"remaining": top.remaining
+						});
 
-				// '*'
-				if(n1 != 1 && n2 != 1 && n1 >= n2)	// optimisation, don't bother multiplying by 1 and multiplication is commutative
-					dfsStack.push({
-						"stack": top.stack.concat([n1 * n2]),
-						"postfixExpr": top.postfixExpr.concat(['*']),
-						"remaining": top.remaining
-					});
+					// '*'
+					if(n1 != 1 && n2 != 1 && n1 >= n2)	// optimisation, don't bother multiplying by 1 and multiplication is commutative
+						dfsStack.push({
+							"stack": top.stack.concat(n1 * n2),
+							"postfixExpr": top.postfixExpr.concat("*"),
+							"remaining": top.remaining
+						});
 
-				// '/'
-				if(n2 > 1 && n1 % n2 === 0)
-					dfsStack.push({
-						"stack": top.stack.concat([n1 / n2]),
-						"postfixExpr": top.postfixExpr.concat(['/']),
-						"remaining": top.remaining
-					});
+					// '/'
+					if(n2 > 1 && n1 % n2 === 0)
+						dfsStack.push({
+							"stack": top.stack.concat(n1 / n2),
+							"postfixExpr": top.postfixExpr.concat("/"),
+							"remaining": top.remaining
+						});
+				}
 			}
 		}
 
