@@ -3,17 +3,14 @@ $(function() {
 
 	// control select numbers buttons
 	var fillBoxes = function(largeCount) {
-		var largeNumbers = [25, 50, 75, 100];
-		var numbers = [];
-		for(var i = 0; i < 6; ++i) {
-			if(i < largeCount) {
-				var randIndex = Math.floor(Math.random() * largeNumbers.length);
-				numbers.push(largeNumbers[randIndex]);
-				largeNumbers.splice(randIndex, 1);
-			}
-			else {
-				numbers.push(Math.floor(Math.random() * 10) + 1);
-			}
+		const largeNumbers = [25, 50, 75, 100];
+		const smallNumbers = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10];
+		const numbers = [];
+		for(let i = 0; i < 6; ++i) {
+			((numberArr) => {
+				const randIndex = Math.floor(Math.random() * numberArr.length);
+				numbers.push(numberArr.splice(randIndex, 1)[0]);
+			})(i < largeCount ? largeNumbers : smallNumbers);
 		}
 		$(".number-col").each(function(index) {
 			$(this).text(numbers[index]);
@@ -41,7 +38,7 @@ $(function() {
 	$("#generate-number").click(function() {
 		var randomChangesLeft = 12;
 		var randomlyChangeTarget = function() {
-			$("#targetnumber").text(Math.floor(Math.random() * 999) + 1);
+			$("#targetnumber").text(Math.floor(Math.random() * (999 - 101 + 1)) + 101);
 			--randomChangesLeft;
 			if(randomChangesLeft) {
 				setTimeout(randomlyChangeTarget, 75);
