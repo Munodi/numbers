@@ -51,26 +51,32 @@ $(function() {
 	});
 
 	// control start clock button
-	var clockTimeout;
+	var clockReqId = 0;
 	$("#start-clock").click(function() {
 		$("#start-clock").addClass("hidden");
-		$("#countdown-display").removeClass("hidden");
-		var startTime = new Date().getTime();
+		$("#countdown-display-holder").removeClass("hidden");
+		const startTime = performance.now();
+		var width = 1;
 		var updateClock = function() {
-			var currentTime = new Date().getTime();
-			var elapsedTime = (currentTime - startTime) / 1000.0;
+			const elapsedTime = (performance.now() - startTime) / 1000.0;
 			$("#countdown-display").text(elapsedTime < 30 ? elapsedTime.toFixed(3) : 30);
 			if(elapsedTime < 30) {
-				clockTimeout = setTimeout(updateClock, 40);
+				if(width < $("#countdown-display")[0].scrollWidth) {	// make countdown-display as wide as it's ever wanted to be
+					width = $("#countdown-display")[0].scrollWidth;
+					$("#countdown-display").css("width", width);
+				}
+				clockReqId = requestAnimationFrame(updateClock);
+			} else {
+				$("#countdown-display").css("width", "").addClass("finished");
 			}
 		}
-		updateClock();
+		clockReqId = requestAnimationFrame(updateClock);
 	});
 
 	var resetClock = function() {
-		clearTimeout(clockTimeout);
-		$("#countdown-display").text("");
-		$("#countdown-display").addClass("hidden");
+		cancelAnimationFrame(clockReqId);
+		$("#countdown-display").text("").removeClass("finished")
+		$("#countdown-display-holder").addClass("hidden");
 		$("#start-clock").removeClass("hidden");
 	};
 	$("#countdown-display").click(resetClock);

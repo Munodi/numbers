@@ -51,7 +51,7 @@ body {
 }
 
 .number-col:empty {
-    background-color: cyan;
+	background-color: cyan;
 }
 
 #solvingarea {
@@ -66,6 +66,16 @@ body {
 }
 
 #countdown-display {
-	text-align: right;
+	text-align: left;
+	display: inline-block;
 	cursor: pointer;
+}
+
+#countdown-display.finished {
+	color: #bf0000;
+	font-weight: bold;
+}
+
+#countdown-display-holder {
+	text-align: right;
 }
