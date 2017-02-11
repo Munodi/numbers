@@ -35,16 +35,16 @@ $(function() {
 	});
 
 	// control generate number button
-	$("#generate-number").click(function() {
+	$("#generate-number").one("click", function displayRandom() {
 		var randomChangesLeft = 12;
 		var randomlyChangeTarget = function() {
 			$("#targetnumber").text(Math.floor(Math.random() * (999 - 101 + 1)) + 101);
-			--randomChangesLeft;
-			if(randomChangesLeft) {
+			if (--randomChangesLeft > 0) {
 				setTimeout(randomlyChangeTarget, 75);
 			} else {
 				$("#generate-number-button-holder").addClass("hidden");
 				$("#play-game-control-holder").removeClass("hidden");
+				$("#generate-number").one("click", displayRandom);
 			}
 		};
 		randomlyChangeTarget();
