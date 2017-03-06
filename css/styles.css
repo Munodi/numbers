@@ -20,6 +20,36 @@ body {
 	min-height: 127px;
 }
 
+#number-selection-button-holder, #generate-number-button-holder, #play-game-control-holder {
+	display: flex;
+}
+
+/* what I want is on narrow viewports to have the buttons wrap, but not orphan the last one. On wider viewports all in a row. */
+#number-selection-button-holder {
+	flex-wrap: wrap;
+}
+
+.number-selection-button {
+	flex: 1 0 33.333%;
+}
+
+@media (min-width: 400px) {
+	.number-selection-button {
+		flex-basis: 0;
+	}
+}
+
+#generate-number {
+	flex: 1;
+}
+
+#restart-button, #display-solution, #countdown-display-holder, #start-clock {
+	flex: 1 0 33.333%;
+	/* squash buttons and hide text when screen is narrower than the buttons (like at 320px) */
+	min-width: 0;
+	overflow-x: hidden;
+}
+
 #targetnumber {
 	border-width: 4px;
 	border-style: ridge;
@@ -78,4 +108,5 @@ body {
 
 #countdown-display-holder {
 	text-align: right;
+	padding-right: 15px;
 }
