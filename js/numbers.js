@@ -105,36 +105,50 @@ $(function() {
 		var imagedata = canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height);
 
 		canvas.width = Math.floor(window.innerWidth);
-		canvas.height = Math.floor(window.innerHeight - $('#top').outerHeight(true));
+		canvas.height = Math.floor(window.innerHeight - $("#top").outerHeight(true));
 		canvas.getContext("2d").putImageData(imagedata, 0, 0);
 	};
 
 	$(window).resize(fixCanvasSize);
 	$(window).resize();
 
-	var mouseStatus = {
+	const mouseStatus = {
 		x: -1,
 		y: -1,
 		down: false
 	};
 
-	var handleMouseDown = function(event) {
+	document.getElementById("solvingarea").addEventListener("mousedown", function(event) {
+		const rect = document.getElementById("solvingarea").getBoundingClientRect();
+		mouseStatus.x = event.clientX - rect.left | 0;
+		mouseStatus.y = event.clientY - rect.top | 0;
+
+		// put a dot down on mousedown so a click will leave a dot
+		const ctx = document.getElementById("solvingarea").getContext("2d");
+		ctx.fillStyle = "rgb(0,0,0)";
+		ctx.fillRect(mouseStatus.x, mouseStatus.y, 1, 1);
+
 		mouseStatus.down = true;
-	};
 
-	var handleMouseUp = function(event) {
+		event.preventDefault();	// stops problems on Chrome
+	});
+
+	document.addEventListener("mouseup", function(event) {	// add to document so can detect mouseup even when not over canvas
 		mouseStatus.down = false;
-	};
+	});
 
-	var handleMouseMove = function(event) {
-		var rect = document.getElementById('solvingarea').getBoundingClientRect();
-		var newX = event.clientX - rect.left | 0;
-		var newY = event.clientY - rect.top | 0;
+	document.addEventListener("mousemove", function(event) {	// add to document so it can draw lines to the edge of the canvas
+		// I can't remember why I put this check in, as far as I can tell it's useless but it might be important
+		if(event.buttons === 0)
+			mouseStatus.down = false;
+
+		const rect = document.getElementById("solvingarea").getBoundingClientRect();
+		const newX = event.clientX - rect.left | 0;
+		const newY = event.clientY - rect.top | 0;
 
 		if(mouseStatus.down) {
-			var ctx = document.getElementById('solvingarea').getContext('2d');
-			ctx.fillStyle = 'rgb(0,0,0)';
-			ctx.fillRect(newX, newY, 1, 1);
+			const ctx = document.getElementById("solvingarea").getContext("2d");
+			ctx.strokeStyle = "rgb(0,0,0)";
 			ctx.beginPath();
 			ctx.moveTo(mouseStatus.x + 0.5, mouseStatus.y + 0.5);
 			ctx.lineTo(newX + 0.5, newY + 0.5);
@@ -143,12 +157,7 @@ $(function() {
 
 		mouseStatus.x = newX;
 		mouseStatus.y = newY;
-		console.log(mouseStatus);
-	};
-
-	document.getElementById("solvingarea").addEventListener("mousedown", handleMouseDown, false);
-	document.getElementById("solvingarea").addEventListener("mouseup", handleMouseUp, false);
-	document.getElementById("solvingarea").addEventListener("mousemove", handleMouseMove, false);
+	});
 
 	var findSolution = function(targetNumber, numbers) {
 
