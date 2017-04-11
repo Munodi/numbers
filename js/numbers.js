@@ -123,6 +123,12 @@ $(function() {
 
 			// then restore pixels to canvas
 			canvas.getContext("2d").putImageData(imageData, 0, 0);
+
+			const ctx = document.getElementById("solvingarea").getContext("2d");
+			ctx.strokeStyle = "rgb(0,0,0)";
+			ctx.lineWidth = 2;
+			ctx.lineJoin = "round";
+			ctx.lineCap = "round";
 		}
 	}
 
@@ -133,6 +139,13 @@ $(function() {
 		x: -1,
 		y: -1,
 		down: false
+	};
+
+	const touchStatus = {
+		x: -1,
+		y: -1,
+		down: false,
+		identifier: -1
 	};
 
 	document.getElementById("solvingarea").addEventListener("mousedown", function(event) {
@@ -165,15 +178,75 @@ $(function() {
 
 		if(mouseStatus.down) {
 			const ctx = document.getElementById("solvingarea").getContext("2d");
-			ctx.strokeStyle = "rgb(0,0,0)";
 			ctx.beginPath();
-			ctx.moveTo(mouseStatus.x + 0.5, mouseStatus.y + 0.5);
-			ctx.lineTo(newX + 0.5, newY + 0.5);
+			ctx.moveTo(mouseStatus.x, mouseStatus.y);
+			ctx.lineTo(newX, newY);
+			ctx.closePath();
 			ctx.stroke();
 		}
 
 		mouseStatus.x = newX;
 		mouseStatus.y = newY;
+	});
+
+	document.getElementById("solvingarea").addEventListener("touchstart", function(event) {
+		if(!touchStatus.down) {
+			touchStatus.down = true;
+			touchStatus.identifier = event.changedTouches[0].identifier;
+
+			const rect = document.getElementById("solvingarea").getBoundingClientRect();
+			touchStatus.x = event.changedTouches[0].clientX - rect.left | 0;
+			touchStatus.y = event.changedTouches[0].clientY - rect.top | 0;
+
+			// put a dot down on touchstart so a click will leave a dot
+			const ctx = document.getElementById("solvingarea").getContext("2d");
+			ctx.fillStyle = "rgb(0,0,0)";
+			ctx.fillRect(touchStatus.x, touchStatus.y, 1, 1);
+		}
+
+		event.preventDefault();
+	});
+
+	document.getElementById("solvingarea").addEventListener("touchmove", function(event) {
+		for(let i = 0; i < event.changedTouches.length; ++i) {
+			if(event.changedTouches[i].identifier === touchStatus.identifier) {
+				const rect = document.getElementById("solvingarea").getBoundingClientRect();
+				const newX = event.changedTouches[i].clientX - rect.left | 0;
+				const newY = event.changedTouches[i].clientY - rect.top | 0;
+
+				const ctx = document.getElementById("solvingarea").getContext("2d");
+				ctx.beginPath();
+				ctx.moveTo(touchStatus.x, touchStatus.y);
+				ctx.lineTo(newX, newY);
+				ctx.closePath();
+				ctx.stroke();
+
+				touchStatus.x = newX;
+				touchStatus.y = newY;
+			}
+		}
+
+		event.preventDefault();
+	});
+
+	document.getElementById("solvingarea").addEventListener("touchend", function(event) {
+		for(let i = 0; i < event.changedTouches.length; ++i) {
+			if(event.changedTouches[i].identifier === touchStatus.identifier) {
+				touchStatus.down = false;
+				touchStatus.identifier = -1;
+			}
+		}
+
+		event.preventDefault();
+	});
+
+	document.getElementById("solvingarea").addEventListener("touchcancel", function(event) {
+		touchStatus.down = false;
+		touchStatus.identifier = -1;
+	});
+
+	document.getElementById("solvingarea").addEventListener("contextmenu", function(event) {
+		event.preventDefault();
 	});
 
 	var findSolution = function(targetNumber, numbers) {
