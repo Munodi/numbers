@@ -9,10 +9,6 @@ html, body {
 
 }
 
-body {
-	background: url(../img/background.png) repeat scroll left top;
-}
-
 #top {
 	background-color: lightgrey;
 	margin:0;
@@ -85,8 +81,7 @@ body {
 }
 
 #solvingarea {
-	//height: 100%;
-	//width: 100%;
+	background: url(../img/background.png) repeat scroll left top;
 }
 
 #clear-drawing-area-button {

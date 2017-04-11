@@ -89,28 +89,45 @@ $(function() {
 
 		resetClock();
 
-		$("#clear-drawing-area-button").click();
+		clearCanvas();
 
 		$("#play-game-control-holder").addClass("hidden");
 		$("#number-selection-button-holder").removeClass("hidden");
 	});
 
-	$("#clear-drawing-area-button").click(function() {
-		var canvas = document.getElementById("solvingarea").width += 0;
-	});
+	$("#clear-drawing-area-button").click(clearCanvas);
 
-	var fixCanvasSize = function() {
-		console.log('resized');
-		var canvas = document.getElementById("solvingarea");
-		var imagedata = canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height);
+	function clearCanvas() {
+		document.getElementById("solvingarea").width += 0;
+	}
 
-		canvas.width = Math.floor(window.innerWidth);
-		canvas.height = Math.floor(window.innerHeight - $("#top").outerHeight(true));
-		canvas.getContext("2d").putImageData(imagedata, 0, 0);
-	};
+	// Increases 'whiteboard' canvas to fill space. As overflow is hidden the canvas size can be larger than is actually seen,
+	// and a shrunk or rotated viewport has its content preserved.
+	function fixCanvasSize() {
+		const canvas = document.getElementById("solvingarea");
+
+		const newWidth = Math.floor(window.innerWidth);
+		const newHeight = Math.floor(window.innerHeight - $("#top").outerHeight(true));
+
+		// increase size only if necessary
+		if (newWidth > canvas.width || newHeight > canvas.height) {
+			// save old canvas pixel content
+			const imageData = canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height);
+
+			// for width and height, increase either or both
+			if (newWidth > canvas.width)
+				canvas.width = newWidth;
+
+			if (newHeight > canvas.height)
+				canvas.height = newHeight;
+
+			// then restore pixels to canvas
+			canvas.getContext("2d").putImageData(imageData, 0, 0);
+		}
+	}
 
 	$(window).resize(fixCanvasSize);
-	$(window).resize();
+	fixCanvasSize();
 
 	const mouseStatus = {
 		x: -1,
