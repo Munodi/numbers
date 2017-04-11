@@ -98,7 +98,8 @@ $(function() {
 	$("#clear-drawing-area-button").click(clearCanvas);
 
 	function clearCanvas() {
-		document.getElementById("solvingarea").width += 0;
+		const canvas = document.getElementById("solvingarea");
+		canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
 	}
 
 	// Increases 'whiteboard' canvas to fill space. As overflow is hidden the canvas size can be larger than is actually seen,
